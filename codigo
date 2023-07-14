@@ -1,0 +1,27 @@
+// Login (Autenticação)
+if (isset($_POST['login'])) {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    // Verifica as credenciais
+    $query = "SELECT * FROM pessoa WHERE email = '$email' AND senha = '$password'";
+    $result = $conn->query($query);
+    if ($result->num_rows > 0) {
+        
+        session_start();
+        $_SESSION['email'] = $email;
+    }
+    // Insere os dados no banco de dados
+    $query = "INSERT INTO pessoa (email, senha) VALUES ('$email', '$password')";
+    $conn->query($query);
+}
+
+
+
+
+session_start();
+if (!isset($_SESSION['email'])) {
+    // Redirecionar para a página de login, se não houver sessão ativa
+    header("Location: login.php");
+    exit();
+}
